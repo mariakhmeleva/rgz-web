@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Админ-панель{% endblock %}
+
+{% block content %}
+<h1>Админ-панель</h1>
+
+<h2>Пользователи</h2>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Логин</th>
+        <th>Роль</th>
+        <th>Действия</th>
+    </tr>
+    {% for user in users %}
+    <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.login }}</td>
+        <td>{{ user.role }}</td>
+        <td>
+            <form method="POST" action="{{ url_for('delete_user', user_id=user.id) }}" onsubmit="return confirm('Вы уверены?');">
+                <button type="submit" class="delete-btn">Удалить</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h2>Товары</h2>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Цена</th>
+        <th>Описание</th>
+        <th>Действия</th>
+    </tr>
+    {% for product in products %}
+    <tr>
+        <td>{{ product.id }}</td>
+        <td>{{ product.name }}</td>
+        <td>{{ product.price }}</td>
+        <td>{{ product.description }}</td>
+        <td>
+            <form method="POST" action="{{ url_for('delete_product', product_id=product.id) }}" onsubmit="return confirm('Вы уверены?');">
+                <button type="submit" class="delete-btn">Удалить</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h2>Добавить товар</h2>
+<form method="POST" action="{{ url_for('add_product') }}">
+    <label for="name">Название:</label>
+    <input type="text" id="name" name="name" required>
+    <br>
+    <label for="price">Цена:</label>
+    <input type="number" id="price" name="price" step="0.01" required>
+    <br>
+    <label for="description">Описание:</label>
+    <textarea id="description" name="description" required></textarea>
+    <br>
+    <button type="submit">Добавить товар</button>
+</form>
+{% endblock %}

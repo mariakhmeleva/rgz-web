@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Online Furniture Store{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Главная</a></li>
+                {% if session.get('user') %}
+                    <li><a href="{{ url_for('cart') }}">Корзина</a></li>
+                    <li><a href="{{ url_for('logout') }}">Выйти</a></li>
+                    {% if user_role == 'admin' %}
+                        <li><a href="{{ url_for('admin') }}">Админ-панель</a></li>
+                    {% endif %}
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Войти</a></li>
+                    <li><a href="{{ url_for('register') }}">Регистрация</a></li>
+                {% endif %}
+                {% if session.get('user') %}
+                    <form method="POST" action="{{ url_for('delete_account') }}" onsubmit="return confirmDelete();">
+                        <button type="submit" class="delete-account-btn">Удалить аккаунт</button>
+                    </form>
+                {% endif %}
+            </ul>
+        </nav>
+        <div class="user-info">
+            {% if user_login %}
+                <p>Привет, {{ user_login }}!</p>
+            {% else %}
+                <p>Привет, Гость!</p>
+            {% endif %}
+            <p>ФИО: Хмелева Мария Сергеевна, Группа: ФБИ-23</p>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Магазин мебели Марии Хмелевой</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        function confirmDelete() {
+            return confirm('Вы уверены, что хотите удалить аккаунт? Это действие необратимо.');
+        }
+    </script>
+</body>
+</html>
